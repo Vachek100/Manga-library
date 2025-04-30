@@ -1,0 +1,12 @@
+{% extends "library/base.html" %}
+
+{% block content %}
+<h2>{{ manga.title }}</h2>
+<p>Author: {{ manga.author.name }}</p>
+<p>Status: {{ manga.get_status_display }}</p>
+{% if manga.borrower %}
+<p>Borrowed by: {{ manga.borrower }}</p>
+<p>Borrow date: {{ manga.borrow_date }}</p>
+{% endif %}
+<a href="{% url 'manga_list' %}">Back to list</a>
+{% endblock %}

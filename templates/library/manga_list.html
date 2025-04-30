@@ -1,3 +1,14 @@
 {% extends "library/base.html" %}
 
 {% block content %}
+    <h2>Manga Collection</h2>
+    <ul>
+        {% for manga in mangas %}
+            <li>
+                <a href="{% url 'manga_detail' manga.pk %}">
+                    {{ manga.title }} by {{manga.author.name}}
+                </a> - {{ manga.get_status_display }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
