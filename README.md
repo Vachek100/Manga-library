@@ -71,7 +71,7 @@ Webová aplikace pro správu mangy v knihovnách. Uživatelé mohou:
 - Prohlížet dostupné tituly mangy
 - Půjčovat a vracet mangu
 - Vyhledávat v kolekci
-- Zobrazovat podrobné informace o každé mangě
+- Zobrazovat podrobné informace o každé mangze
 
 ### 🚀 Návod k instalaci
 
