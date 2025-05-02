@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Author(models.Model):
@@ -13,6 +14,8 @@ class Manga(models.Model):
         ('AVAILABLE', 'Available'),
         ('BORROWED', 'Borrowed'),
         ('RESERVED', 'Reserved'),
+        ('LOST', 'Lost'),
+        ('DAMAGED', 'Damaged'),
     ]
 
     title = models.CharField(max_length=200)
@@ -22,8 +25,12 @@ class Manga(models.Model):
         choices=BORROWING_STATUS,
         default='AVAILABLE'
     )
-    borrower = models.CharField(max_length=100, blank=True, null=True)
+    borrower = models.ForeignKey(
+        User, on_delete=models.SET_NULL, blank=True, null=True)
     borrow_date = models.DateField(blank=True, null=True)
+    cover = models.ImageField(upload_to='covers/', blank=True, null=True)
+    condition = models.CharField(max_length=100, blank=True)
+    last_updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.title} by {self.author.name} ({self.get_status_display()})"

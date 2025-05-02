@@ -1,0 +1,14 @@
+{% extends "library/base.html" %}
+
+{% block content %}
+<div class="confirmation-box">
+    <h2>Confirm Return</h2>
+    <p>Are you sure you want to return "{{ manga.title }}"?</p>
+
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn-return">Confirm Return</button>
+        <a href="{% url 'manga_detail' manga.pk %}" class="btn-cancel">Cancel</a>
+    </form>
+</div>
+{% endblock %}

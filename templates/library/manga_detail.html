@@ -1,12 +1,22 @@
 {% extends "library/base.html" %}
 
 {% block content %}
-<h2>{{ manga.title }}</h2>
-<p>Author: {{ manga.author.name }}</p>
-<p>Status: {{ manga.get_status_display }}</p>
-{% if manga.borrower %}
-<p>Borrowed by: {{ manga.borrower }}</p>
-<p>Borrow date: {{ manga.borrow_date }}</p>
-{% endif %}
-<a href="{% url 'manga_list' %}">Back to list</a>
+    <div class="manga-detail">
+        {% if manga.cover %}
+            <img src="{{ manga.cover.url }}" alt="{{ manga.title }}" class="detail-cover">
+        {% endif %}
+        <div class="detail-info">
+            <h2>{{ manga.title }}</h2>
+            <p><strong>Author:</strong> {{ manga.author.name }}</p>
+            <p><strong>Status:</strong> {{ manga.get_status_display }}</p>
+            {% if manga.borrower %}
+                <p><strong>Borrowed by:</strong> {{ manga.borrower.username }}</p>
+                <p><strong>Borrow date:</strong> {{ manga.borrow_date }}</p>
+            {% endif %}
+            {% if user.is_authenticated and manga.status == 'BORROWED' and manga.borrower == user %}
+                <a href="{% url 'return_manga' manga.pk %}" class="btn-return">Return This Manga</a>
+            {% endif %}
+            <a href="{% url 'manga_list' %}" class="btn back">Back to list</a>
+        </div>
+    </div>
 {% endblock %}

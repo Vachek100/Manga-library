@@ -2,13 +2,36 @@
 
 {% block content %}
     <h2>Manga Collection</h2>
-    <ul>
+    {% if not user.is_authenticated %}
+        <p class="auth-prompt">Please <a href="{% url 'login' %}">login</a> to borrow manga.</p>
+    {% endif %}
+    <div class="search-container">
+    <form method="get" action="{% url 'manga_list' %}">
+        <input type="text" name="q" placeholder="Search manga..." value="{{ request.GET.q }}">
+        <button type="submit">Search</button>
+    </form>
+</div>
+    <div class="manga-container">
         {% for manga in mangas %}
-            <li>
-                <a href="{% url 'manga_detail' manga.pk %}">
-                    {{ manga.title }} by {{manga.author.name}}
-                </a> - {{ manga.get_status_display }}
-            </li>
+            <div class="manga-item">
+                {% if manga.cover %}
+                    <img src="{{ manga.cover.url }}" alt="{{ manga.title }}" class="manga-cover">
+                {% else %}
+                    <div class="no-cover">No Cover Image</div>
+                {% endif %}
+                <div class="manga-info">
+                    <h3><a href="{% url 'manga_detail' manga.pk %}">{{ manga.title }}</a></h3>
+                    <p>Author: {{ manga.author.name }}</p>
+                    <p class="status-{{ manga.status|lower }}">Status: {{ manga.get_status_display }}</p>
+                    {% if user.is_authenticated %}
+                        {% if manga.status == 'AVAILABLE' %}
+                            <a href="{% url 'borrow_manga' manga.pk %}" class="btn borrow">Borrow</a>
+                        {% elif manga.status == 'BORROWED' and manga.borrower == user %}
+                            <a href="{% url 'return_manga' manga.pk %}" class="btn return">Return</a>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
         {% endfor %}
-    </ul>
+    </div>
 {% endblock %}

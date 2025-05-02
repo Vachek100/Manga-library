@@ -1,19 +1,29 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-    <title>Manga library</title>
+    <title>Manga Library</title>
     <link rel="stylesheet" href="/static/library/css/style.css">
 </head>
-
 <body>
-    <header>
-        <h1><a href="{% url 'manga_list' %}">Manga Library</a></h1>
-    </header>
+    <div class="top-bar">
+        <div class="user-info">
+            {% if user.is_authenticated %}
+                <span class="welcome-msg">Welcome, {{ user.username }}!</span>
+                <form action="{% url 'logout' %}" method="post" class="logout-form">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-btn">Logout</button>
+                </form>
+                {% else %}
+                <a href="{% url 'login' %}" class="auth-btn">Login</a>
+                <a href="{% url 'signup' %}" class="auth-btn">Sign Up</a>
+            {% endif %}
+        </div>
+        <h1><a href="{% url 'manga_list' %}" class="site-title">Manga Library</a></h1>
+    </div>
+
     <main>
         {% block content %}
         {% endblock %}
     </main>
 </body>
-
 </html>
